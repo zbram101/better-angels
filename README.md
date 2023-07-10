@@ -22,7 +22,7 @@ Before getting started, make sure you have the following:
 
 To build and deploy the application using Docker, follow these steps:
 
-1. Run the following command: docker-compose up --build
+1. Run the following command at root of project: docker-compose up --build
 
 2. This will start the API on port 5000, and the UI will be accessible on port 80. Once the application has built and started, navigate to [http://localhost/login](http://localhost/login) in your web browser.
 
