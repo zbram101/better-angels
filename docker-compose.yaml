@@ -1,0 +1,33 @@
+services:
+  postgres-db:
+    container_name: postgres-db
+    image: postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: "mydb"
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+    
+  backend:
+    container_name: backend
+    image: be-app
+    build: BE
+    ports: 
+      - "5000:5000"
+    environment:
+      DB_NAME: "mydb"
+      DB_USERNAME: "user"
+      DB_PASSWORD: "password"
+      DB_HOST: "postgres-db"
+    depends_on:
+      - postgres-db
+
+  frontend:
+    container_name: frontend
+    image: fe-app
+    build: FE
+    ports:
+      - "80:3000"
+    depends_on:
+      - backend
