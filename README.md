@@ -1,16 +1,13 @@
 # Welcome to the Library/Bookstore
 
-
 There are 3 types of users for this application ( ADMIN, LIBRARIAN, CUSTOMER)
 
 LIBRARIAN and CUSTOMER can register via the UI ADMIN can only be added via postman.
 
-LIBRARIAN add, edit, delete and manage the books they can also see the list of users.
-CUSTOMER can reserve the book
+LIBRARIAN and ADMIN can search, add, edit, delete books they can also see the list of users.
+CUSTOMER can only search and reserve books
 
 Reservation is a simple counter that just keep track of number of books avaliable. 
-
-
 
 ## Prerequisites
 
@@ -25,17 +22,24 @@ Before getting started, make sure you have the following:
 
 To build and deploy the application using Docker, follow these steps:
 
-1. Run the following command:
-
-docker-compose up --build
+1. Run the following command: docker-compose up --build
 
 2. This will start the API on port 5000, and the UI will be accessible on port 80. Once the application has built and started, navigate to [http://localhost/login](http://localhost/login) in your web browser.
 
 
+## Test Data
 
-## Review / Test Application
+db: To connect to postgres running in docker connect to port 5433
+api: [http://localhost:5000/books](http://localhost:5000/books)
+ui: [http://localhost/login](http://localhost/login)
 
-1) create an Admin user 
+1. Manual steps: 
+    - Create a LIBRARIAN user 
+    - Add books
+    - Create a CUSTOMER user
+2. auto load data:
+    - After application is running
+    - In BE folder run `python3 src/startup_data.py`
 
 
 
@@ -45,21 +49,18 @@ docker-compose up --build
 
 To deploy the application on a Kubernetes cluster, follow these steps:
 
-1. Run the following command:
-
-kubectl apply -f k8-deploy.yaml
-
+1. Run the following command: kubectl apply -f k8-deploy.yaml
 
 2. The application will be deployed based on the configuration specified in the `k8-deploy.yaml` file.
-
-For more detailed information on the structure and architecture of the frontend (FE) and backend (BE), please refer to the respective folders' README.md files.
-
-
 
 
 ## Architecture / Standards FE
 
-This is a React application that utilizes Redux for state management, using the Redux Toolkit. The forms are built using the React Hook Form library, which simplifies form validation and error handling.
+The frontend of the application is developed using React. It utilizes Redux, a state management library, along with the Redux Toolkit for a more streamlined development experience. React Hook Form is used to handle form validation and error handling, providing a user-friendly experience.
+
+### Design Choices
+
+The choice of React and Redux was made to ensure a modular and scalable architecture for the frontend. React allows for the creation of reusable UI components, while Redux facilitates centralized state management, making it easier to handle application-wide data. The usage of Redux Toolkit further simplifies the implementation of Redux with its built-in tools and best practices.
 
 ### Folder Structure
 
@@ -72,11 +73,6 @@ The folder structure of the application follows a standardized pattern to organi
 - **features**: The `features` folder is where you will find components specific to different features or sections of the application. Each feature can have its own folder containing related components, styles, and routes. This modular approach helps isolate and organize the codebase based on different application functionalities.
 
 This folder structure allows for a clear separation of concerns, promotes code reuse, and facilitates maintainability and scalability of the Library/Bookstore application.
-
-
-### New Features
-
-When creating a new feature, create a new folder with its views and routes, and store it under the "features" directory. Barrel files are used to simplify imports, and the base URL for the repository is set to `src`.
 
 ### Wrappers
 
@@ -99,12 +95,16 @@ Although the application functions as expected and handles most edge cases, ther
 
 
 
-### Architecture / Standards BE
+## Architecture / Standards BE
 
-The backend of the application is built with Flask, following the MVC (Model-View-Controller) architectural pattern. The backend follows the SOLID principles with a focus on Separation of Concerns. It employs SQLAlchemy with Flask-Migrate for database management using a PostgreSQL database.
+The backend of the application is built using Flask, a lightweight Python web framework, following the MVC (Model-View-Controller) architectural pattern. The backend adheres to the SOLID principles, emphasizing Separation of Concerns. It leverages SQLAlchemy with Flask-Migrate for efficient management of the PostgreSQL database.
+
+### Design Choices
+
+The selection of Flask as the backend framework was driven by its simplicity, flexibility, and ease of use. The MVC pattern allows for clear separation between models (representing the data structure), views (handling response generation and processing), and controllers (handling business logic). SQLAlchemy with Flask-Migrate provides a powerful database management solution, enabling efficient data handling and migration operations.
 
 
-#### Folder Structure
+### Folder Structure
 
 The backend folder structure adheres to the separation of components:
 
@@ -114,14 +114,13 @@ The backend folder structure adheres to the separation of components:
 - **Services**: Provides access to models and acts as an intermediary layer between controllers and models, performing database operations.
 - **Utils**: Contains reusable utility functions and helper classes for common tasks.
 
-
-#### Decorators
+### Decorators
 
 Decorators such as `@token_required`  `@handle_api_exception` `@validate_request_required_fields` facilitate separation between business logic, auth, validation, and error management.
 
-### Areas to Improve (Given Time) BE
+## Areas to Improve (Given Time) BE
 
-1. **Scalability Management**: Implement pagination in both the UI and API layers to handle large datasets, ensuring performance with a significant number of books.
+1. **Scalability Management**: Implement pagination in both the UI and API layers to handle large datasets, ensuring performance with a significant number of books.Also search route might be the most used and with growing books it would be advised to move that functionality to its own instance in k8. 
 
 2. **Error Handling:** While basic error handling is enabled, further enhancements can be made to implement more robust error management, including standardized error responses and logging.
 
