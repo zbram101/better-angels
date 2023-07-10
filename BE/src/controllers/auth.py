@@ -16,6 +16,7 @@ class AuthController:
         return  {
             'token': self.auth_service.get_token(email),
             'email': email,
+            'user_type': data['user_type'],
             'name': data['name']
         }, 'User registered successfully', 200
 
